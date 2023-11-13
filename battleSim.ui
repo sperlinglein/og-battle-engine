@@ -23,10 +23,10 @@
       <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
-         <x>-20</x>
-         <y>-36</y>
+         <x>0</x>
+         <y>-67</y>
          <width>1096</width>
-         <height>1618</height>
+         <height>1649</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout">
@@ -39,6 +39,18 @@
            <enum>QFrame::Raised</enum>
           </property>
           <layout class="QGridLayout" name="gridLayout_16">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="startBattelBut">
+             <property name="font">
+              <font>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Start Battle</string>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="0">
             <widget class="QPushButton" name="startOptimzeBut">
              <property name="font">
@@ -51,16 +63,15 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="startBattelBut">
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
+           <item row="2" column="0">
+            <widget class="QFrame" name="frame_2">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
              </property>
-             <property name="text">
-              <string>Start Battle</string>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
              </property>
+             <layout class="QGridLayout" name="gridLayout_18"/>
             </widget>
            </item>
           </layout>
@@ -127,7 +138,7 @@
                   </font>
                  </property>
                  <property name="inputMask">
-                  <string>1</string>
+                  <string/>
                  </property>
                  <property name="text">
                   <string>1</string>
@@ -1216,6 +1227,9 @@
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item row="1" column="0">
@@ -1273,6 +1287,9 @@
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item row="2" column="0">
@@ -1320,6 +1337,9 @@
                  </property>
                  <property name="text">
                   <string/>
+                 </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
                  </property>
                 </widget>
                </item>
@@ -1588,6 +1608,9 @@
                  <property name="text">
                   <string/>
                  </property>
+                 <property name="autoExclusive">
+                  <bool>false</bool>
+                 </property>
                 </widget>
                </item>
                <item row="5" column="1">
@@ -1745,7 +1768,7 @@
                   </font>
                  </property>
                  <property name="inputMask">
-                  <string>1</string>
+                  <string/>
                  </property>
                  <property name="text">
                   <string>1</string>
@@ -3371,6 +3394,30 @@
               <string>Angreifer</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_10">
+              <item row="2" column="1">
+               <widget class="QLCDNumber" name="vDeutA_res">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="smallDecimalPoint">
+                 <bool>false</bool>
+                </property>
+                <property name="digitCount">
+                 <number>12</number>
+                </property>
+                <property name="segmentStyle">
+                 <enum>QLCDNumber::Filled</enum>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="label_57">
                 <property name="font">
@@ -3386,8 +3433,32 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QLCDNumber" name="vKrisA_res">
+              <item row="3" column="1">
+               <widget class="QLCDNumber" name="verbrauch_A1">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>14</pointsize>
+                 </font>
+                </property>
+                <property name="digitCount">
+                 <number>12</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLCDNumber" name="vMetA_res">
                 <property name="minimumSize">
                  <size>
                   <width>200</width>
@@ -3425,51 +3496,13 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="1">
-               <widget class="QLCDNumber" name="vDeutA_res">
-                <property name="minimumSize">
-                 <size>
-                  <width>200</width>
-                  <height>25</height>
-                 </size>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_62">
+                <property name="text">
+                 <string>Treibstoff</string>
                 </property>
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="smallDecimalPoint">
-                 <bool>false</bool>
-                </property>
-                <property name="digitCount">
-                 <number>12</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Filled</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QLCDNumber" name="vMetA_res">
-                <property name="minimumSize">
-                 <size>
-                  <width>200</width>
-                  <height>25</height>
-                 </size>
-                </property>
-                <property name="font">
-                 <font>
-                  <pointsize>14</pointsize>
-                 </font>
-                </property>
-                <property name="smallDecimalPoint">
-                 <bool>false</bool>
-                </property>
-                <property name="digitCount">
-                 <number>12</number>
-                </property>
-                <property name="segmentStyle">
-                 <enum>QLCDNumber::Filled</enum>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
@@ -3488,17 +3521,11 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
-               <widget class="QLCDNumber" name="verbrauch_A1">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
+              <item row="1" column="1">
+               <widget class="QLCDNumber" name="vKrisA_res">
                 <property name="minimumSize">
                  <size>
-                  <width>150</width>
+                  <width>200</width>
                   <height>25</height>
                  </size>
                 </property>
@@ -3507,18 +3534,37 @@
                   <pointsize>14</pointsize>
                  </font>
                 </property>
+                <property name="smallDecimalPoint">
+                 <bool>false</bool>
+                </property>
                 <property name="digitCount">
                  <number>12</number>
                 </property>
+                <property name="segmentStyle">
+                 <enum>QLCDNumber::Filled</enum>
+                </property>
                </widget>
               </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="label_62">
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_81">
                 <property name="text">
-                 <string>Treibstoff</string>
+                 <string>Total MSE</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLCDNumber" name="mseA_res">
+                <property name="minimumSize">
+                 <size>
+                  <width>150</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="digitCount">
+                 <number>12</number>
                 </property>
                </widget>
               </item>
@@ -3673,7 +3719,7 @@
            <item row="2" column="2">
             <widget class="QGroupBox" name="Limits">
              <property name="title">
-              <string>Maximale Schiffe pro Typp</string>
+              <string>Maximale Schiffe pro Typ</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_15">
               <item row="0" column="1">
@@ -3947,7 +3993,7 @@
               <item row="0" column="1">
                <widget class="QLineEdit" name="mseMet">
                 <property name="text">
-                 <string>1</string>
+                 <string>3</string>
                 </property>
                </widget>
               </item>
@@ -3968,7 +4014,7 @@
               <item row="0" column="5">
                <widget class="QLineEdit" name="mseDeut">
                 <property name="text">
-                 <string>3</string>
+                 <string>1</string>
                 </property>
                </widget>
               </item>
@@ -3993,6 +4039,89 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <tabstops>
+  <tabstop>waffen_A1</tabstop>
+  <tabstop>schilde_A1</tabstop>
+  <tabstop>panzer_A1</tabstop>
+  <tabstop>hypertechnik</tabstop>
+  <tabstop>verbrenn_A1</tabstop>
+  <tabstop>impuls_A1</tabstop>
+  <tabstop>hyper_A1</tabstop>
+  <tabstop>gala_A1</tabstop>
+  <tabstop>system_A1</tabstop>
+  <tabstop>platz_A1</tabstop>
+  <tabstop>kt_A1</tabstop>
+  <tabstop>gt_A1</tabstop>
+  <tabstop>lj_A1</tabstop>
+  <tabstop>sj_A1</tabstop>
+  <tabstop>k_A1</tabstop>
+  <tabstop>ss_A1</tabstop>
+  <tabstop>recs_A1</tabstop>
+  <tabstop>kolo_A1</tabstop>
+  <tabstop>spio_A1</tabstop>
+  <tabstop>bb_A1</tabstop>
+  <tabstop>zr_A1</tabstop>
+  <tabstop>ts_A1</tabstop>
+  <tabstop>sx_A1</tabstop>
+  <tabstop>rp_A1</tabstop>
+  <tabstop>pa_A1</tabstop>
+  <tabstop>waffen_D1</tabstop>
+  <tabstop>schilde_D1</tabstop>
+  <tabstop>panzer_D1</tabstop>
+  <tabstop>gala_D1</tabstop>
+  <tabstop>system_D1</tabstop>
+  <tabstop>platz_D1</tabstop>
+  <tabstop>kt_D1</tabstop>
+  <tabstop>gt_D1</tabstop>
+  <tabstop>lj_D1</tabstop>
+  <tabstop>sj_D1</tabstop>
+  <tabstop>k_D1</tabstop>
+  <tabstop>ss_D1</tabstop>
+  <tabstop>recs_D1</tabstop>
+  <tabstop>kolo_D1</tabstop>
+  <tabstop>spio_D1</tabstop>
+  <tabstop>bb_D1</tabstop>
+  <tabstop>zr_D1</tabstop>
+  <tabstop>ts_D1</tabstop>
+  <tabstop>sx_D1</tabstop>
+  <tabstop>rp_D1</tabstop>
+  <tabstop>pa_D1</tabstop>
+  <tabstop>raks_D1</tabstop>
+  <tabstop>ll_D1</tabstop>
+  <tabstop>sl_D1</tabstop>
+  <tabstop>gk_D1</tabstop>
+  <tabstop>ik_D1</tabstop>
+  <tabstop>pw_D1</tabstop>
+  <tabstop>cr_D1</tabstop>
+  <tabstop>sat_D1</tabstop>
+  <tabstop>ks_D1</tabstop>
+  <tabstop>gs_D1</tabstop>
+  <tabstop>mseMet</tabstop>
+  <tabstop>mseKris</tabstop>
+  <tabstop>mseDeut</tabstop>
+  <tabstop>maxKt</tabstop>
+  <tabstop>maxGt</tabstop>
+  <tabstop>maxRec</tabstop>
+  <tabstop>maxSpio</tabstop>
+  <tabstop>maxKolo</tabstop>
+  <tabstop>maxPa</tabstop>
+  <tabstop>maxLj</tabstop>
+  <tabstop>maxSj</tabstop>
+  <tabstop>maxK</tabstop>
+  <tabstop>maxSs</tabstop>
+  <tabstop>maxBb</tabstop>
+  <tabstop>maxZr</tabstop>
+  <tabstop>maxTs</tabstop>
+  <tabstop>maxSx</tabstop>
+  <tabstop>maxRp</tabstop>
+  <tabstop>startOptimzeBut</tabstop>
+  <tabstop>startBattelBut</tabstop>
+  <tabstop>gs_res_D1</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>ks_res_D1</tabstop>
+  <tabstop>attTab</tabstop>
+  <tabstop>defTab</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

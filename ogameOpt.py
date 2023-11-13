@@ -1,5 +1,5 @@
 #test
-from PyQt5 import QtWidgets, uic
+from PyQt5 import QtWidgets, uic, QtCore
 import OG, sys, og_units
 from BattleEngine import BattleEngine, Combatant
 import scipy, _thread, time
@@ -63,11 +63,17 @@ class wrapOutCome():
                     self.cr = og_units.Crawler(stats.num_remaining_units)
 
 class BattleMainWindow(QtWidgets.QMainWindow, form_class):
+
+
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.startBattelBut.clicked.connect(self.startBattle)
         self.startOptimzeBut.clicked.connect(self.optimizeAttack)
+        self.timer = QtCore.QTimer()
+        self.timer.timeout.connect(self.__myUpdate)
+        self.timer.start(200) #Optimizer caan lead to big Lags in GUI -> force Repaint all 0.2s -> 5fps
+
 
     def loadData(self):
         # load Attacker
@@ -170,6 +176,7 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             remainA = remainA + bufA
             try:
                 getattr(self, i + "_res_A1").display(bufA)
+                vMetA = vMetA + (attacker[0].unit_groups[getattr(attacker_outcomes[-1], i).name] - bufA) * getattr(attacker_outcomes[-1], i).met
                 vKrisA = vKrisA + (attacker[0].unit_groups[getattr(attacker_outcomes[-1], i).name] - bufA) * getattr(attacker_outcomes[-1], i).kris
                 vDeutA = vDeutA + (attacker[0].unit_groups[getattr(attacker_outcomes[-1], i).name] - bufA) * getattr(attacker_outcomes[-1], i).deut
             except:
@@ -184,7 +191,7 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             except:
                 pass
         return vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, remainA, remainD
-    def showLosses(self, vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD):
+    def showLosses(self, vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, fuel):
         self.tfMet.display(int((vMetA+vMetD)*0.7))
         self.tfKris.display(int((vKrisA + vKrisD) * 0.7))
         self.tfDeut.display(int((vDeutA + vDeutD) * 0.7))
@@ -194,6 +201,9 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         self.vMetD_res.display(int(vMetD))
         self.vKrisD_res.display(int(vKrisD))
         self.vDeutD_res.display(int(vDeutD))
+
+        mseA = vMetA + (vKrisA * float(self.mseMet.text()) / float(self.mseKris.text()) ) + (vDeutA + fuel) * float(self.mseMet.text()) / float(self.mseDeut.text())
+        self.mseA_res.display(int(mseA))
     def calcFuel(self, attacker):
         minSpeed = 9999999
 
@@ -297,8 +307,79 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         attacker, defender = self.loadData()
         rounds, attacker_out, defender_out = self.calcBattle(attacker, defender)
         vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, remainA, remainD = self.analyzBattele(attacker, defender, attacker_out, defender_out)
-        self.showLosses(vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD)
-        self.calcFuel(attacker)
+        fuel = self.calcFuel(attacker)
+        self.showLosses(vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD,fuel)
+
+    def optimizerStart(self,a):
+        # Check best fit Standard fleets
+        # x0 = [KT:0, GT:1, LJ:2, SJ:3, K:4, SS:5, KO:6, Rc:7, Sp:8, BB:9, ZR:10, TS:11, SX:12, RP:13, Pa:14]
+        xB = [0, 0, 10, 10, 10, 10, 0, 0, 0, 10, 10, 0, 10, 10, 0]  # alle Kampsschife base 10 Stueck
+        self.initRes = []
+        self.running = []
+        count = 0
+
+        for lj in arange(0.001, 1.0, 0.4):
+            xB[2] = int(lj * self.bounds[2][1])
+            for k in arange(0.001, 1.0, 0.4):
+                xB[4] = int(k * self.bounds[2][1])
+                self.running.append(True)
+                _thread.start_new_thread(self.optimizerInitWorker, (xB.copy(), self.defenderOpt, count))
+                time.sleep(1)
+                count = count + 1
+
+        self.optimizerWaiInit()
+    def optimizerInitWorker(self, x, defender, count):
+        #print("worker",count, "mit",x)
+        for ss in arange(0.001, 1.0, 0.4):
+            x[5] = int(ss * self.bounds[5][1])
+            for bb in arange(0.001, 1.0, 0.4):
+                x[9] = int(bb * self.bounds[9][1])
+                for zr in arange(0.001, 1.0, 0.4):
+                    x[10] = int(zr * self.bounds[10][1])
+                    for sx in arange(0.001, 1.0, 0.4):
+                        x[12] = int(sx * self.bounds[12][1])
+                        for rp in arange(0.001, 1, 0.4):
+                            x[13] = int(rp * self.bounds[13][1])
+                            buf = self.optimzeWorker(x, defender)
+                            self.initRes.append([buf, x.copy()])
+                            #print(self.initRes[-1])
+            #print("Bomber ", xB[2], xB[4], xB[5], xB[9], xB[10], xB[12], xB[13])
+        self.running[count] = False
+        #print("Worker",count, "done")
+
+    def optimizerWaiInit(self):
+        while (True in self.running):
+            time.sleep(1)
+
+        sortRes = sorted(self.initRes, key=lambda x: x[0])
+        #print("Init Best fleet ", sortRes[0])
+        #print("Init worst fleet ", sortRes[-1])
+        res = scipy.optimize.minimize(self.optimzeWorker, sortRes[0][1], args=self.defenderOpt, bounds=self.bounds,
+                                      method='Nelder-Mead')
+        #print(res.message)
+        #print(res.fun)
+        #print(res.x)
+
+        self.kt_A1.setText(str(int(res.x[0])))
+        self.gt_A1.setText(str(int(res.x[1])))
+        self.lj_A1.setText(str(int(res.x[2])))
+        self.sj_A1.setText(str(int(res.x[3])))
+        self.k_A1.setText(str(int(res.x[4])))
+        self.ss_A1.setText(str(int(res.x[5])))
+        self.kolo_A1.setText(str(int(res.x[6])))
+        self.recs_A1.setText(str(int(res.x[7])))
+        self.spio_A1.setText(str(int(res.x[8])))
+        self.bb_A1.setText(str(int(res.x[9])))
+        self.zr_A1.setText(str(int(res.x[10])))
+        self.ts_A1.setText(str(int(res.x[11])))
+        self.sx_A1.setText(str(int(res.x[12])))
+        self.rp_A1.setText(str(int(res.x[13])))
+        self.pa_A1.setText(str(int(res.x[14])))
+        self.startBattle()
+        self.activateWindow()
+
+        self.timer.stop()
+
 
     def optimzeWorker(self, attackerOpt, defender):
         #adjust attacker
@@ -333,35 +414,18 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             return 10e14
 
         else:
+            #Metallkosten + (X / Y) * Kristallkosten + (X / Z) * Deuteriumkosten
             fuel = self.calcFuel(attackers)
-            difM = vMetA * float(self.mseMet.text())
-            difK = vKrisA * float(self.mseKris.text())
-            difD = (vDeutA + fuel) * float(self.mseDeut.text())
+            difM = vMetA
+            difK = vKrisA * float(self.mseMet.text()) / float(self.mseKris.text())
+            difD = (vDeutA + fuel) * float(self.mseMet.text()) / float(self.mseDeut.text())
             ret = difM + difK + difD
             #print(ret)
             return ret
 
-    def optimizeInitWorker(self, x, defender, count):
-        #print("worker",count, "mit",x)
-        for ss in arange(0.001, 1.0, 0.4):
-            x[5] = int(ss * self.bounds[5][1])
-            for bb in arange(0.001, 1.0, 0.4):
-                x[9] = int(bb * self.bounds[9][1])
-                for zr in arange(0.001, 1.0, 0.4):
-                    x[10] = int(zr * self.bounds[10][1])
-                    for sx in arange(0.001, 1.0, 0.4):
-                        x[12] = int(sx * self.bounds[12][1])
-                        for rp in arange(0.001, 1, 0.4):
-                            x[13] = int(rp * self.bounds[13][1])
-                            buf = self.optimzeWorker(x, defender)
-                            self.initRes.append([buf, x.copy()])
-                            #print(self.initRes[-1])
-            #print("Bomber ", xB[2], xB[4], xB[5], xB[9], xB[10], xB[12], xB[13])
-        self.running[count] = False
-        #print("Worker",count, "done")
     def optimizeAttack(self):
         # init data load
-        x, defender = self.loadData()  # defener stays, attacker gets adjusted
+        x, self.defenderOpt = self.loadData()  # defener stays, attacker gets adjusted
         #load max Limits
         self.bounds = [(0,int(self.maxKt.text())),
                   (0, int(self.maxGt.text())),
@@ -380,51 +444,12 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
                   (0, int(self.maxPa.text()))
         ]
 
-        #Check best fit Standard fleets
-        #x0 = [KT:0, GT:1, LJ:2, SJ:3, K:4, SS:5, KO:6, Rc:7, Sp:8, BB:9, ZR:10, TS:11, SX:12, RP:13, Pa:14]
-        xB = [0, 0, 10, 10, 10, 10, 0, 0, 0, 10, 10, 0, 10, 10, 0] #alle Kampsschife base 10 Stueck
-        self.initRes = []
-        self.running = []
-        count = 0
+        _thread.start_new_thread(self.optimizerStart, (self,))
 
-        for lj in arange(0.001,1.0,0.4):
-            xB[2] = int(lj * self.bounds[2][1])
-            for k in arange(0.001, 1.0, 0.4):
-                xB[4] = int(k * self.bounds[2][1])
-                self.running.append(True)
-                _thread.start_new_thread(self.optimizeInitWorker, (xB.copy(), defender, count))
-                time.sleep(1)
-                count = count + 1
+    def __myUpdate(self):
+        self.repaint()
 
-        while(True in self.running):
-            time.sleep(1)
 
-        sortRes = sorted(self.initRes, key=lambda x:x[0])
-        print("Init Best fleet ",sortRes[0])
-        print("Init worst fleet ", sortRes[-1])
-
-        res = scipy.optimize.minimize(self.optimzeWorker, sortRes[0][1], args=defender, bounds=self.bounds,method='Nelder-Mead')
-        print(res.message)
-        print(res.fun)
-        print(res.x)
-
-        self.kt_A1.setText(str(int(res.x[0])))
-        self.gt_A1.setText(str(int(res.x[1])))
-        self.lj_A1.setText(str(int(res.x[2])))
-        self.sj_A1.setText(str(int(res.x[3])))
-        self.k_A1.setText(str(int(res.x[4])))
-        self.ss_A1.setText(str(int(res.x[5])))
-        self.kolo_A1.setText(str(int(res.x[6])))
-        self.recs_A1.setText(str(int(res.x[7])))
-        self.spio_A1.setText(str(int(res.x[8])))
-        self.bb_A1.setText(str(int(res.x[9])))
-        self.zr_A1.setText(str(int(res.x[10])))
-        self.ts_A1.setText(str(int(res.x[11])))
-        self.sx_A1.setText(str(int(res.x[12])))
-        self.rp_A1.setText(str(int(res.x[13])))
-        self.pa_A1.setText(str(int(res.x[14])))
-        self.startBattle()
-        self.activateWindow()
 
 if __name__ == "__main__":
 
