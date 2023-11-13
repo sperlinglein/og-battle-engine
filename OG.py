@@ -22,6 +22,9 @@ IonCannon = UnitKind(18)
 PlasmaTurret = UnitKind(19)
 SmallShieldDome = UnitKind(20)
 LargeShieldDome = UnitKind(21)
+Reaper = UnitKind(22)
+Pathfinder = UnitKind(23)
+Crawler = UnitKind(24)
 
 names = {
     SmallCargo: 'Small Cargo',
@@ -46,6 +49,9 @@ names = {
     PlasmaTurret: 'Plasma Turret',
     SmallShieldDome: 'Small Shield Dome',
     LargeShieldDome: 'Large Shield Dome',
+    Reaper: 'Reaper',
+    Pathfinder: 'Pathfinder',
+    Crawler: 'Crawler',
 }
 
 units_attributes = {
@@ -56,6 +62,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     LargeCargo: UnitAttributes(
@@ -65,6 +72,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     LightFighter: UnitAttributes(
@@ -74,6 +82,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     HeavyFighter: UnitAttributes(
@@ -84,6 +93,7 @@ units_attributes = {
             SmallCargo: 3,
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     Cruiser: UnitAttributes(
@@ -95,6 +105,7 @@ units_attributes = {
             EspionageProbe: 5,
             SolarSatellite: 5,
             RocketLauncher: 10,
+            Crawler: 5,
         },
     ),
     Battleship: UnitAttributes(
@@ -104,6 +115,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     ColonyShip: UnitAttributes(
@@ -113,6 +125,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     Recycler: UnitAttributes(
@@ -122,6 +135,7 @@ units_attributes = {
         rapid_fire={
             EspionageProbe: 5,
             SolarSatellite: 5,
+            Crawler: 5,
         },
     ),
     EspionageProbe: UnitAttributes(
@@ -143,6 +157,7 @@ units_attributes = {
             GaussCannon: 5,
             IonCannon: 10,
             PlasmaTurret: 5,
+            Crawler: 5,
         },
     ),
     SolarSatellite: UnitAttributes(
@@ -160,6 +175,7 @@ units_attributes = {
             SolarSatellite: 5,
             Battlecruiser: 2,
             LightLaser: 10,
+            Crawler: 5,
         },
     ),
     DeathStar: UnitAttributes(
@@ -177,6 +193,9 @@ units_attributes = {
             Recycler: 250,
             EspionageProbe: 1250,
             Bomber: 25,
+            Reaper: 10,
+            Pathfinder: 30,
+            Crawler: 250,
             SolarSatellite: 1250,
             Destroyer: 5,
             Battlecruiser: 15,
@@ -229,7 +248,9 @@ units_attributes = {
         weapons=150.0,
         shield=500.0,
         armor=8000.0,
-        rapid_fire={},
+        rapid_fire={
+            Reaper:2,
+        },
     ),
     PlasmaTurret: UnitAttributes(
         weapons=3000.0,
@@ -248,5 +269,45 @@ units_attributes = {
         shield=10000.0,
         armor=100000.0,
         rapid_fire={},
+    ),
+    Reaper: UnitAttributes(
+        weapons=2800.0,
+        shield=700.0,
+        armor=140000.0,
+        rapid_fire={
+            EspionageProbe: 5,
+            SolarSatellite: 5,
+            Crawler: 5,
+            Battleship: 7,
+            Bomber: 4,
+            Destroyer: 3,
+        },
+    ),
+    Pathfinder: UnitAttributes(
+        weapons=200.0,
+        shield=100.0,
+        armor=23000.0,
+        rapid_fire={
+            EspionageProbe: 5,
+            SolarSatellite: 5,
+            Crawler: 5,
+            Cruiser: 3,
+            LightFighter: 3,
+            HeavyFighter: 2,
+        },
+    ),
+    Crawler: UnitAttributes(
+        weapons=1.0,
+        shield=1.0,
+        armor=4000.0,
+        rapid_fire={
+            SmallCargo: 3,
+            LargeCargo: 3,
+            HeavyFighter: 4,
+            Cruiser: 4,
+            Battleship: 7,
+            EspionageProbe: 5,
+            SolarSatellite: 5,
+        },
     ),
 }
