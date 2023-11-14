@@ -64,7 +64,6 @@ class wrapOutCome():
 
 class BattleMainWindow(QtWidgets.QMainWindow, form_class):
 
-
     def __init__(self, parent=None):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.setupUi(self)
@@ -73,8 +72,6 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.__myUpdate)
         self.timer.start(200) #Optimizer caan lead to big Lags in GUI -> force Repaint all 0.2s -> 5fps
-
-
     def loadData(self):
         # load Attacker
         attackers = [
@@ -137,7 +134,7 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             ),
         ]
         return attackers, defenders
-    def calcBattle(self, attacker, defender):
+    def calcBattle(self, attacker, defender, seed = 0):
         # init Battle Engine
         engine = BattleEngine('BattleEngine-win.exe', OG.units_attributes)
         num_rounds = []
@@ -146,7 +143,7 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
 
         # calc Battla 100 times
         for i in range(10):
-            outcome = engine.simulate(attacker, defender)[0]
+            outcome = engine.simulate(attacker, defender, seed)[0]
             num_rounds.append(outcome.num_rounds)
             attackers_outcomes.append(wrapOutCome(outcome.attackers_outcomes))
             defenders_outcomes.append(wrapOutCome(outcome.defenders_outcomes))
@@ -309,7 +306,6 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, remainA, remainD = self.analyzBattele(attacker, defender, attacker_out, defender_out)
         fuel = self.calcFuel(attacker)
         self.showLosses(vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD,fuel)
-
     def optimizerStart(self,a):
         # Check best fit Standard fleets
         # x0 = [KT:0, GT:1, LJ:2, SJ:3, K:4, SS:5, KO:6, Rc:7, Sp:8, BB:9, ZR:10, TS:11, SX:12, RP:13, Pa:14]
@@ -346,16 +342,21 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             #print("Bomber ", xB[2], xB[4], xB[5], xB[9], xB[10], xB[12], xB[13])
         self.running[count] = False
         #print("Worker",count, "done")
-
     def optimizerWaiInit(self):
         while (True in self.running):
             time.sleep(1)
 
         sortRes = sorted(self.initRes, key=lambda x: x[0])
+
+        x0 = []
+        for i in sortRes[0][1]:
+            if i <= 10:
+                x0.append(0)
+            else:
+                x0.append(i)
         #print("Init Best fleet ", sortRes[0])
         #print("Init worst fleet ", sortRes[-1])
-        res = scipy.optimize.minimize(self.optimzeWorker, sortRes[0][1], args=self.defenderOpt, bounds=self.bounds,
-                                      method='Nelder-Mead')
+        res = scipy.optimize.minimize(self.optimzeWorker, x0, args=self.defenderOpt, bounds=self.bounds, method='Nelder-Mead')
         #print(res.message)
         #print(res.fun)
         #print(res.x)
@@ -377,10 +378,6 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         self.pa_A1.setText(str(int(res.x[14])))
         self.startBattle()
         self.activateWindow()
-
-        self.timer.stop()
-
-
     def optimzeWorker(self, attackerOpt, defender):
         #adjust attacker
         attackers = [
@@ -407,7 +404,7 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
                 },
             ),
         ]
-        rounds, attacker_out, defender_out = self.calcBattle(attackers,defender )
+        rounds, attacker_out, defender_out = self.calcBattle(attackers,defender, seed = 50000000 )
         vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, remainA, remainD = self.analyzBattele(attackers, defender,attacker_out,defender_out)
         if remainD > 0:
             # print("punish")
@@ -419,10 +416,10 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
             difM = vMetA
             difK = vKrisA * float(self.mseMet.text()) / float(self.mseKris.text())
             difD = (vDeutA + fuel) * float(self.mseMet.text()) / float(self.mseDeut.text())
+            self.showLosses(vMetA, vKrisA, vDeutA, vMetD, vKrisD, vDeutD, fuel)
             ret = difM + difK + difD
             #print(ret)
             return ret
-
     def optimizeAttack(self):
         # init data load
         x, self.defenderOpt = self.loadData()  # defener stays, attacker gets adjusted
@@ -445,10 +442,8 @@ class BattleMainWindow(QtWidgets.QMainWindow, form_class):
         ]
 
         _thread.start_new_thread(self.optimizerStart, (self,))
-
     def __myUpdate(self):
         self.repaint()
-
 
 
 if __name__ == "__main__":
