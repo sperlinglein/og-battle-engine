@@ -300,14 +300,6 @@ units_attributes = {
         weapons=1.0,
         shield=1.0,
         armor=4000.0,
-        rapid_fire={
-            SmallCargo: 3,
-            LargeCargo: 3,
-            HeavyFighter: 4,
-            Cruiser: 4,
-            Battleship: 7,
-            EspionageProbe: 5,
-            SolarSatellite: 5,
-        },
+        rapid_fire={},
     ),
 }
