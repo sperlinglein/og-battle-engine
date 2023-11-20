@@ -25,8 +25,12 @@ class UnitAttributes:
     shield: float
     armor: float
     rapid_fire: Dict[UnitKind, int]
+    metal: int
+    crystal: int
+    deuterium: int
 
-    def __init__(self, weapons: float, shield: float, armor: float, rapid_fire: Dict[UnitKind, int]):
+    def __init__(self, weapons: float, shield: float, armor: float, rapid_fire: Dict[UnitKind, int],
+                 metal: int = 0, crystal: int = 0, deuterium: int = 0):
         if weapons <= 0.0:
             raise ValueError('weapons must be greater than 0')
         if shield <= 0.0:
@@ -40,6 +44,9 @@ class UnitAttributes:
         self.shield = shield
         self.armor = armor
         self.rapid_fire = rapid_fire
+        self.metal = metal
+        self.crystal = crystal
+        self.deuterium = deuterium
 
 
 class Combatant:

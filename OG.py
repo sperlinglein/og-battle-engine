@@ -27,31 +27,31 @@ Pathfinder = UnitKind(23)
 Crawler = UnitKind(24)
 
 names = {
-    SmallCargo: 'Small Cargo',
-    LargeCargo: 'Large Cargo',
-    LightFighter: 'Light Fighter',
-    HeavyFighter: 'Heavy Fighter',
-    Cruiser: 'Cruiser',
-    Battleship: 'Battleship',
-    ColonyShip: 'ColonyShip',
-    Recycler: 'Recycler',
-    EspionageProbe: 'Espionage Probe',
-    Bomber: 'Bomber',
-    SolarSatellite: 'Solar Satellite',
-    Destroyer: 'Destroyer',
-    DeathStar: 'Death Star',
-    Battlecruiser: 'Battlecruiser',
-    RocketLauncher: 'Rocket Launcher',
-    LightLaser: 'Light Laser',
-    HeavyLaser: 'Heavy Laser',
-    GaussCannon: 'Gauss Cannon',
-    IonCannon: 'Ion Cannon',
-    PlasmaTurret: 'Plasma Turret',
-    SmallShieldDome: 'Small Shield Dome',
-    LargeShieldDome: 'Large Shield Dome',
-    Reaper: 'Reaper',
-    Pathfinder: 'Pathfinder',
-    Crawler: 'Crawler',
+    SmallCargo: 'small_cargo',
+    LargeCargo: 'large_cargo',
+    LightFighter: 'light_fighter',
+    HeavyFighter: 'heavy_fighter',
+    Cruiser: 'cruiser',
+    Battleship: 'battleship',
+    ColonyShip: 'colonyship',
+    Recycler: 'recycler',
+    EspionageProbe: 'espionage_probe',
+    Bomber: 'bomber',
+    SolarSatellite: 'solar_satellite',
+    Destroyer: 'destroyer',
+    DeathStar: 'death_star',
+    Battlecruiser: 'battlecruiser',
+    RocketLauncher: 'rocket_launcher',
+    LightLaser: 'light_laser',
+    HeavyLaser: 'heavy_laser',
+    GaussCannon: 'gauss_cannon',
+    IonCannon: 'ion_cannon',
+    PlasmaTurret: 'plasma_turret',
+    SmallShieldDome: 'small_shield_dome',
+    LargeShieldDome: 'large_shield_dome',
+    Reaper: 'reaper',
+    Pathfinder: 'pathfinder',
+    Crawler: 'crawler',
 }
 
 units_attributes = {
@@ -64,6 +64,8 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=2000,
+        crystal=2000
     ),
     LargeCargo: UnitAttributes(
         weapons=5.0,
@@ -74,6 +76,8 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=6000,
+        crystal=6000
     ),
     LightFighter: UnitAttributes(
         weapons=50.0,
@@ -84,6 +88,8 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=3000,
+        crystal=1000
     ),
     HeavyFighter: UnitAttributes(
         weapons=150.0,
@@ -95,6 +101,8 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=6000,
+        crystal=4000
     ),
     Cruiser: UnitAttributes(
         weapons=400.0,
@@ -107,6 +115,9 @@ units_attributes = {
             RocketLauncher: 10,
             Crawler: 5,
         },
+        metal=20000,
+        crystal=7000,
+        deuterium=2000
     ),
     Battleship: UnitAttributes(
         weapons=1000.0,
@@ -117,6 +128,8 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=45000,
+        crystal=15000
     ),
     ColonyShip: UnitAttributes(
         weapons=50.0,
@@ -127,6 +140,9 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=10000,
+        crystal=20000,
+        deuterium=10000
     ),
     Recycler: UnitAttributes(
         weapons=1.0,
@@ -137,12 +153,16 @@ units_attributes = {
             SolarSatellite: 5,
             Crawler: 5,
         },
+        metal=10000,
+        crystal=6000,
+        deuterium=2000
     ),
     EspionageProbe: UnitAttributes(
         weapons=0.01,
         shield=0.01,
         armor=1000.0,
         rapid_fire={},
+        crystal=1000
     ),
     Bomber: UnitAttributes(
         weapons=1000.0,
@@ -159,12 +179,17 @@ units_attributes = {
             PlasmaTurret: 5,
             Crawler: 5,
         },
+        metal=50000,
+        crystal=25000,
+        deuterium=15000
     ),
     SolarSatellite: UnitAttributes(
         weapons=1.0,
         shield=1.0,
         armor=2000.0,
         rapid_fire={},
+        crystal=2000,
+        deuterium=500
     ),
     Destroyer: UnitAttributes(
         weapons=2000.0,
@@ -177,6 +202,9 @@ units_attributes = {
             LightLaser: 10,
             Crawler: 5,
         },
+        metal=60000,
+        crystal=50000,
+        deuterium=15000
     ),
     DeathStar: UnitAttributes(
         weapons=200000.0,
@@ -205,6 +233,9 @@ units_attributes = {
             GaussCannon: 50,
             IonCannon: 100,
         },
+        metal=5000000,
+        crystal=4000000,
+        deuterium=1000000
     ),
     Battlecruiser: UnitAttributes(
         weapons=700.0,
@@ -219,30 +250,41 @@ units_attributes = {
             EspionageProbe: 5,
             SolarSatellite: 5,
         },
+        metal=30000,
+        crystal=40000,
+        deuterium=15000
     ),
     RocketLauncher: UnitAttributes(
         weapons=80.0,
         shield=10.0,
         armor=2000.0,
         rapid_fire={},
+        metal=2000
     ),
     LightLaser: UnitAttributes(
         weapons=100.0,
         shield=25.0,
         armor=2000.0,
         rapid_fire={},
+        metal=1500,
+        crystal=500
     ),
     HeavyLaser: UnitAttributes(
         weapons=250.0,
         shield=100.0,
         armor=8000.0,
         rapid_fire={},
+        metal=6000,
+        crystal=2000
     ),
     GaussCannon: UnitAttributes(
         weapons=1100.0,
         shield=200.0,
         armor=35000.0,
         rapid_fire={},
+        metal=20000,
+        crystal=15000,
+        deuterium=2000
     ),
     IonCannon: UnitAttributes(
         weapons=150.0,
@@ -251,24 +293,33 @@ units_attributes = {
         rapid_fire={
             Reaper:2,
         },
+        metal=5000,
+        crystal=3000
     ),
     PlasmaTurret: UnitAttributes(
         weapons=3000.0,
         shield=300.0,
         armor=100000.0,
         rapid_fire={},
+        metal=50000,
+        crystal=50000,
+        deuterium=3000
     ),
     SmallShieldDome: UnitAttributes(
         weapons=1.0,
         shield=2000.0,
         armor=20000.0,
         rapid_fire={},
+        metal=10000,
+        crystal=10000
     ),
     LargeShieldDome: UnitAttributes(
         weapons=1.0,
         shield=10000.0,
         armor=100000.0,
         rapid_fire={},
+        metal=50000,
+        crystal=50000
     ),
     Reaper: UnitAttributes(
         weapons=2800.0,
@@ -282,6 +333,9 @@ units_attributes = {
             Bomber: 4,
             Destroyer: 3,
         },
+        metal=85000,
+        crystal=55000,
+        deuterium=20000
     ),
     Pathfinder: UnitAttributes(
         weapons=200.0,
@@ -295,11 +349,17 @@ units_attributes = {
             LightFighter: 3,
             HeavyFighter: 2,
         },
+        metal=8000,
+        crystal=15000,
+        deuterium=8000
     ),
     Crawler: UnitAttributes(
         weapons=1.0,
         shield=1.0,
         armor=4000.0,
         rapid_fire={},
+        metal=2000,
+        crystal=2000,
+        deuterium=1000
     ),
 }
